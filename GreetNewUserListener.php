@@ -1,8 +1,8 @@
 <?php
 
-class GreetNewUserListener
+class GreetNewUserListener implements EventListenerInterface
 {
-    public function sendWelcomeMail(NewUserEvent $event): void
+    public function handle(object $event): void
     {
         $user = $event->userId;
 

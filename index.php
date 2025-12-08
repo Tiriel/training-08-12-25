@@ -9,7 +9,7 @@ require __DIR__.'/GreetNewUserListener.php';
 // $car = Car::__construct();
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener(NewUserEvent::class, [new GreetNewUserListener(), 'sendWelcomeMail']);
+$dispatcher->addListener(NewUserEvent::class, new GreetNewUserListener());
 
 // in registration workflow
 $dispatcher->dispatch(new NewUserEvent(1));
