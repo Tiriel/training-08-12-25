@@ -14,13 +14,9 @@ class EventDispatcher
 
     public function dispatch(object $event, ?string $eventName = null): object
     {
+        $eventName ??= $event::class;
         $calledListeners = [];
-
-        if (\is_string($eventName) && '' !== $eventName) {
-            $listenersToCall = $this->listeners[$eventName] ?? [];
-        } else {
-            $listenersToCall = $this->listeners[$event::class];
-        }
+        $listenersToCall = $this->listeners[$eventName] ?? [];
 
         foreach ($listenersToCall as $listener) {
             if (!\in_array($listener, $calledListeners)) {
