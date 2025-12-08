@@ -1,5 +1,7 @@
 <?php
 
+namespace App\EventDispatcher\Listener;
+
 class GreetNewUserListener implements EventListenerInterface
 {
     public function handle(object $event): void
