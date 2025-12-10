@@ -18,20 +18,18 @@ final class ConferenceController extends AbstractController
     #[Route('', name: 'app_conference_list', methods: ['GET'])]
     public function list(ConferenceRepository $repository, #[MapQueryParameter] int $page = 1): Response
     {
-        $conferences = \array_map(
-            fn(Conference $c) => ['id' => $c->getId(), 'name' => $c->getName()],
-            $repository->findBy([], [], 20 , 20 * ($page -1))
-        );
+        $conferences = $repository->findBy([], [], 20 , 20 * ($page -1));
 
-        return $this->json($conferences);
+        return $this->render('conference/list.html.twig', [
+            'conferences' => $conferences,
+        ]);
     }
 
     #[Route('/{id}', name: 'app_conference_show', methods: ['GET'])]
-    public function show(Conference $conference)
+    public function show(Conference $conference): Response
     {
-        return $this->json([
-            'id' => $conference->getId(),
-            'name' => $conference->getName(),
+        return $this->render('conference/show.html.twig', [
+            'conference' => $conference,
         ]);
     }
 

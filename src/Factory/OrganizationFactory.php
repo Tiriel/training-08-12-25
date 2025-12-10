@@ -34,7 +34,7 @@ final class OrganizationFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'name' => self::faker()->realText(55),
+            'name' => self::faker()->realText(20),
             'presentation' => self::faker()->realText(),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
