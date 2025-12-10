@@ -34,11 +34,20 @@ final class ConferenceController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_conference_new')]
-    public function newConference(): Response
+    #[Route('/new', name: 'app_conference_new', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/edit', name: 'app_conference_edit', methods: ['GET', 'POST'])]
+    public function save(?Conference $conference, Request $request, EntityManagerInterface $manager): Response
     {
-        $conference = new Conference();
+        $conference ??= new Conference();
         $form = $this->createForm(ConferenceType::class, $conference);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($conference);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_conference_show', ['id' => $conference->getId()]);
+        }
 
         return $this->render('conference/new.html.twig', [
             'form' => $form,
