@@ -1,24 +1,22 @@
-<form id="contactForm">
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% macro input(form_input = '') %}
+    <div class="form-floating mb-3">
+        {{ form_widget(form_input) }}
+        {{ form_label(form_input) }}
+        {{ form_errors(form_input) }}
+    </div>
+{% endmacro %}
+
+{{ form_start(form) }}
     <!-- Name input-->
-    <div class="form-floating mb-3">
-        <input class="form-control" id="name" type="text" placeholder="Enter your name..." />
-        <label for="name">Full name</label>
-    </div>
+    {{ _self.input(form.name) }}
     <!-- Email address input-->
-    <div class="form-floating mb-3">
-        <input class="form-control" id="email" type="email" placeholder="name@example.com" />
-        <label for="email">Email address</label>
-    </div>
+    {{ _self.input(form.email) }}
     <!-- Subject input-->
-    <div class="form-floating mb-3">
-        <input class="form-control" id="subject" type="text" placeholder="The subject of your mail..." />
-        <label for="subject">Subject</label>
-    </div>
+    {{ _self.input(form.subject) }}
     <!-- Message input-->
-    <div class="form-floating mb-3">
-        <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem"></textarea>
-        <label for="message">Message</label>
-    </div>
+    {{ _self.input(form.message) }}
     <!-- Submit Button-->
     <div class="d-grid"><button class="btn btn-primary btn-lg" style="background-color: limegreen; border-color: limegreen;" id="submitButton" type="submit">Submit</button></div>
-</form>
+{{ form_end(form) }}
