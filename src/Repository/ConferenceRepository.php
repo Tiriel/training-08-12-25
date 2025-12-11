@@ -12,6 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ConferenceRepository extends ServiceEntityRepository
 {
+    public const MAX_RESULTS = 20;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Conference::class);
@@ -39,6 +41,18 @@ class ConferenceRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findLikeName(string $name, int $page = 1): array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb->andWhere($qb->expr()->like('c.name', ':name'))
+            ->setParameter('name', '%'.$name.'%')
+            ->setMaxResults(self::MAX_RESULTS)
+            ->setFirstResult(self::MAX_RESULTS * ($page - 1))
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
