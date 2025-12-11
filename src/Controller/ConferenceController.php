@@ -28,13 +28,8 @@ final class ConferenceController extends AbstractController
     #[Route('/search', name: 'app_conference_search', methods: ['GET'])]
     public function search(#[MapQueryParameter] string $name, ConferenceSearchInterface $search)
     {
-        $conferences = \array_map(
-            fn(array $conf) => ApiConference::create($conf),
-            $search->searchByName($name)
-        );
-
         return $this->render('conference/search.html.twig', [
-            'conferences' => $conferences,
+            'conferences' => $search->searchByName($name),
         ]);
     }
 

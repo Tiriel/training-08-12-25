@@ -88,16 +88,4 @@ class ApiConference
         $this->organizations = $organizations;
         return $this;
     }
-
-    public static function create(array $conference): ApiConference
-    {
-        return (new static())
-            ->setName($conference['name'])
-            ->setDescription($conference['description'])
-            ->setAccessible($conference['accessible'])
-            ->setPrerequisites($conference['prerequisites'])
-            ->setStartAt(\DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $conference['startDate']))
-            ->setEndAt(\DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $conference['endDate']))
-            ->setOrganizations($conference['organizations']);
-    }
 }
