@@ -6,17 +6,24 @@ use App\Entity\Conference;
 use App\Exception\MissingDatesExceptions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @extends ServiceEntityRepository<Conference>
  */
 class ConferenceRepository extends ServiceEntityRepository
 {
-    public const MAX_RESULTS = 20;
+    private int $maxResults = 0;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Conference::class);
+    }
+
+    #[Required]
+    public function setMaxResults(int $maxResults): void
+    {
+        $this->maxResults = $maxResults;
     }
 
     /**
@@ -49,8 +56,8 @@ class ConferenceRepository extends ServiceEntityRepository
 
         return $qb->andWhere($qb->expr()->like('c.name', ':name'))
             ->setParameter('name', '%'.$name.'%')
-            ->setMaxResults(self::MAX_RESULTS)
-            ->setFirstResult(self::MAX_RESULTS * ($page - 1))
+            ->setMaxResults($this->maxResults)
+            ->setFirstResult($this->maxResults * ($page - 1))
             ->getQuery()
             ->getResult();
     }
