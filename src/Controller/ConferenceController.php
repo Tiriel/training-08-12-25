@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Dto\ApiConference;
 use App\Entity\Conference;
 use App\Form\ConferenceType;
 use App\Search\ConferenceSearchInterface;
+use App\Search\DatabaseConferenceSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +18,23 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ConferenceController extends AbstractController
 {
     #[Route('', name: 'app_conference_list', methods: ['GET'])]
-    public function list(ConferenceSearchInterface $search, #[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?string $name = null): Response
+    public function list(DatabaseConferenceSearch $search, #[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?string $name = null): Response
     {
         return $this->render('conference/list.html.twig', [
             'conferences' => $search->searchByName($name, $page),
+        ]);
+    }
+
+    #[Route('/search', name: 'app_conference_search', methods: ['GET'])]
+    public function search(#[MapQueryParameter] string $name, ConferenceSearchInterface $search)
+    {
+        $conferences = \array_map(
+            fn(array $conf) => ApiConference::create($conf),
+            $search->searchByName($name)
+        );
+
+        return $this->render('conference/search.html.twig', [
+            'conferences' => $conferences,
         ]);
     }
 
