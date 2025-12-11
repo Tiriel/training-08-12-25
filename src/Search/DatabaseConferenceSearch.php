@@ -4,7 +4,7 @@ namespace App\Search;
 
 use App\Repository\ConferenceRepository;
 
-readonly class DatabaseConferenceSearch
+readonly class DatabaseConferenceSearch implements ConferenceSearchInterface
 {
     public function __construct(
         private ConferenceRepository $repository,
