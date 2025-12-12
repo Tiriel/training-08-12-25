@@ -5,7 +5,7 @@ namespace App\Search\Transformer;
 use App\Dto\ApiConference;
 use App\Exception\MissingKeyFromApiException;
 
-class ApiToConferenceDtoTransformer
+class ApiToConferenceDtoTransformer extends AbstractDataTransformer
 {
     private const KEYS = [
         'name',
@@ -17,19 +17,12 @@ class ApiToConferenceDtoTransformer
         'organizations',
     ];
 
-    public function transformCollection(array $data): array
+    public function transformOne(mixed $data): ApiConference
     {
-        $conferences = [];
-
-        foreach ($data as $datum) {
-            $conferences[] = $this->transformOne($datum);
+        if (!\is_array($data)) {
+            throw new \InvalidArgumentException('$data must be an array');
         }
 
-        return $conferences;
-    }
-
-    public function transformOne(array $data): ApiConference
-    {
         if (0 < \count(\array_diff(self::KEYS, \array_keys($data)))) {
             throw new MissingKeyFromApiException();
         }
