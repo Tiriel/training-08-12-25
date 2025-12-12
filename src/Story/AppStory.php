@@ -5,6 +5,7 @@ namespace App\Story;
 use App\Factory\ConferenceFactory;
 use App\Factory\OrganizationFactory;
 use App\Factory\UserFactory;
+use App\Factory\VolunteeringFactory;
 use Zenstruck\Foundry\Attribute\AsFixture;
 use Zenstruck\Foundry\Story;
 
@@ -31,5 +32,6 @@ final class AppStory extends Story
         ]);
         OrganizationFactory::createMany(10);
         ConferenceFactory::createMany(50);
+        VolunteeringFactory::createMany(50);
     }
 }

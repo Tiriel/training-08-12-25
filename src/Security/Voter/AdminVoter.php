@@ -11,13 +11,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminVoter implements VoterInterface
 {
-    public function __construct(
-        private readonly AccessDecisionManagerInterface $checker,
-    ) {}
-
     //public function __construct(
-    //    private readonly RoleHierarchyInterface $hierarchy,
+    //    private readonly AccessDecisionManagerInterface $checker,
     //) {}
+
+    public function __construct(
+        private readonly RoleHierarchyInterface $hierarchy,
+    ) {}
 
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
@@ -26,14 +26,14 @@ class AdminVoter implements VoterInterface
             return self::ACCESS_ABSTAIN;
         }
 
-        //$roles = $this->hierarchy->getReachableRoleNames($user->getRoles());
-        //if (\in_array('ROLE_ADMIN', $roles)) {
-        //    return self::ACCESS_GRANTED;
-        //}
-
-        if ($this->checker->decide($token, ['ROLE_ADMIN'])) {
+        $roles = $this->hierarchy->getReachableRoleNames($user->getRoles());
+        if (\in_array('ROLE_ADMIN', $roles)) {
             return self::ACCESS_GRANTED;
         }
+
+        //if ($this->checker->decide('ROLE_ADMIN')) {
+        //    return self::ACCESS_GRANTED;
+        //}
 
         return self::ACCESS_ABSTAIN;
     }

@@ -7,16 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
 class Conference
 {
+    #[Groups('volunteering')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('volunteering')]
     #[Assert\Length(min: 10)]
     #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
@@ -35,11 +38,13 @@ class Conference
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $prerequisites = null;
 
+    #[Groups('volunteering')]
     #[Assert\GreaterThan('today')]
     #[Assert\NotBlank()]
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 
+    #[Groups('volunteering')]
     #[Assert\GreaterThanOrEqual(propertyPath: 'startAt')]
     #[Assert\NotBlank()]
     #[ORM\Column]
@@ -54,6 +59,7 @@ class Conference
     /**
      * @var Collection<int, Organization>
      */
+    #[Groups('volunteering')]
     #[Assert\Valid()]
     #[Assert\NotNull()]
     #[ORM\ManyToMany(targetEntity: Organization::class, inversedBy: 'conferences', cascade: ['persist'])]
