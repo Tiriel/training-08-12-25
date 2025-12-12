@@ -43,7 +43,6 @@ class DtoToConferenceTransformer extends AbstractDataTransformer
 
     private function getOrCreateOrg(array $arrayOrg): Organization
     {
-        dump($arrayOrg);
         if (0 < \count(\array_diff(self::ORG_KEYS, \array_keys($arrayOrg)))) {
             throw new MissingKeyFromApiException();
         }
