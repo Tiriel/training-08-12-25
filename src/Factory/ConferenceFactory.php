@@ -39,6 +39,7 @@ final class ConferenceFactory extends PersistentObjectFactory
             'name' => self::faker()->realText(100),
             'startAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTimeBetween('01-01-2015', 'now')),
             'organizations' => OrganizationFactory::randomRangeOrCreate(0, 3),
+            'createdBy' => UserFactory::randomOrCreate(),
         ];
     }
 

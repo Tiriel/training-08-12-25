@@ -7,6 +7,7 @@ use App\Entity\Conference;
 use App\Form\ConferenceType;
 use App\Search\ConferenceSearchInterface;
 use App\Search\DatabaseConferenceSearch;
+use App\Security\Voter\Attributes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -53,6 +54,10 @@ final class ConferenceController extends AbstractController
         //}
 
         $conference ??= new Conference();
+        if (null !== $conference->getId()) {
+            $this->denyAccessUnlessGranted(Attributes::EDIT_CONF, $conference);
+        }
+
         $form = $this->createForm(ConferenceType::class, $conference);
 
         $form->handleRequest($request);
