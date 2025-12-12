@@ -15,7 +15,7 @@ final class PersistMissingConferencesListener
     #[AsEventListener]
     public function onApiConferencesReceivedEvent(ApiConferencesReceivedEvent $event): void
     {
-        $conferences = $event->conferences;
-        $this->persister->persistConferences($conferences);
+        $conferences = $event->getConferences();
+        $event->setConferences($this->persister->persistConferences($conferences));
     }
 }

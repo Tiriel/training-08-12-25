@@ -28,7 +28,7 @@ final class ConferenceController extends AbstractController
     #[Route('/search', name: 'app_conference_search', methods: ['GET'])]
     public function search(#[MapQueryParameter] string $name, ConferenceSearchInterface $search)
     {
-        return $this->render('conference/search.html.twig', [
+        return $this->render('conference/list.html.twig', [
             'conferences' => $search->searchByName($name),
         ]);
     }

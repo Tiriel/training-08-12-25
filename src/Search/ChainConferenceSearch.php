@@ -24,9 +24,10 @@ class ChainConferenceSearch implements ConferenceSearchInterface
         if ([] === $conferences) {
             $conferences = $this->searches->get(ApiConferenceSearch::class)->searchByName($name);
 
-            $this->dispatcher->dispatch(new ApiConferencesReceivedEvent($conferences));
+            $event = new ApiConferencesReceivedEvent($conferences);
+            $this->dispatcher->dispatch($event);
 
-            return $conferences;
+            return $event->getConferences();
         }
 
         return $conferences;

@@ -14,7 +14,6 @@ class DtoToConferenceTransformer extends AbstractDataTransformer
     private const ORG_KEYS = [
         'name',
         'presentation',
-        'creationDate',
     ];
 
     public function __construct(
@@ -36,27 +35,28 @@ class DtoToConferenceTransformer extends AbstractDataTransformer
             ->setEndAt($data->getEndAt());
 
         foreach ($data->getOrganizations() as $arrayOrg) {
-            $org = $this->organizationRepository->findOneBy([
-                    'name' => $arrayOrg['name'],
-                    'createdAt' => $arrayOrg['creationDate'],
-                ])
-                ?? $this->createOrg($arrayOrg);
-
-            $conference->addOrganization($org);
+            $conference->addOrganization($this->getOrCreateOrg($arrayOrg));
         }
 
         return $conference;
     }
 
-    private function createOrg(array $arrayOrg): Organization
+    private function getOrCreateOrg(array $arrayOrg): Organization
     {
+        dump($arrayOrg);
         if (0 < \count(\array_diff(self::ORG_KEYS, \array_keys($arrayOrg)))) {
             throw new MissingKeyFromApiException();
         }
 
-        return (new Organization())
-            ->setName($arrayOrg['name'])
-            ->setPresentation($arrayOrg['presentation'])
-            ->setCreatedAt($arrayOrg['creationDate']);
+        $org = $this->organizationRepository->findOneBy(['name' => $arrayOrg['name']]);
+
+        if (null === $org) {
+            return (new Organization())
+                ->setName($arrayOrg['name'])
+                ->setPresentation($arrayOrg['presentation'])
+                ->setCreatedAt(new \DateTimeImmutable($arrayOrg['creationDate'] ?? null));
+        }
+
+        return $org;
     }
 }
