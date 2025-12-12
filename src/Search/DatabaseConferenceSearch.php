@@ -3,7 +3,9 @@
 namespace App\Search;
 
 use App\Repository\ConferenceRepository;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('app.conference_search')]
 readonly class DatabaseConferenceSearch implements ConferenceSearchInterface
 {
     public function __construct(

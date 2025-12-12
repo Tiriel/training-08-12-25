@@ -4,11 +4,11 @@ namespace App\Search;
 
 use App\Dto\ApiConference;
 use App\Search\Transformer\ApiToConferenceDtoTransformer;
-use Symfony\Component\DependencyInjection\Attribute\AsAlias;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsAlias]
+#[AutoconfigureTag('app.conference_search')]
 class ApiConferenceSearch implements ConferenceSearchInterface
 {
     public function __construct(
